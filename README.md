@@ -6,30 +6,32 @@ It is not recommended to check .deb files in to source control, however precedin
 
 ## Inputs
 
-### `storage-container-url`
+### `storage_container_url`
 **Required** URL of OpenStack compatible Object Storage container
-### `open-stack-authorisation-url`
+### `open_stack_authorisation_url`
 **Required** URL of OpenStack authorisation end point
-### `open-stack-project-id`
+### `open_stack_project_id`
 **Required** OpenStack project ID with which the target Object Storage container is associated
-### `swift-client-username`
+### `swift_client_username`
 **Required** OpenStack / Swift client username for uploads
-### `swift-client-password`
+### `swift_client_password`
 **Required** OpenStack / Swift client password for uploads
-### `swift-region-name`
+### `swift_region_name`
 **Required** OpenStack / Swift client region name for target Object Storage container
-### `swift-container-name`
+### `swift_container_name`
 **Required** OpenStack / Swift client name for target Object Storage container
-### `private-key`
+### `private_key`
 **Required** GPG Private key in ascii armor format for signing packages
-### `private-key-email`
+### `private_key_email`
 **Required** GPG Private key email address
-### `private-key-passphrase`
+### `private_key_passphrase`
 **Required** GPG Private key passphrase
-### `public-key`
+### `public_key`
 **Required** GPG Public key in ascii armor for verifying signing packages
-### `list-file-name`
+### `list_file_name`
 **Required** Name of the .list file users will download and add to their local machines when consuming your PPA
+### `execution_path`:
+**Required** Sub directory in which to execute the action defaults to the repository root
 
 ## Consuming packages
 
@@ -79,6 +81,7 @@ jobs:
         private_key_passphrase: ${{ secrets.PPA_PRIVATE_KEY_PASSPHRASE }}
         public_key: ${{ secrets.PPA_PUBLIC_KEY }}
         list_file_name: my_respository.list
+        execution_path: sumbodule/build-directory
 ```
 
 ## License

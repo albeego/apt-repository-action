@@ -38,6 +38,10 @@ inputs:
   list_file_name:
     description: 'Name of the .list file users will download and add to their local machines when consuming your PPA'
     required: true
+  execution_path:
+    description: 'Sub directory in which to execute the action'
+    required: true
+    default: '.'
 
 branding:
   icon: "anchor"
