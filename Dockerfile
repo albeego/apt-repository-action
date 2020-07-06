@@ -21,4 +21,5 @@ RUN apt-get install \
 	apt-utils -y
 RUN apt-get install \
 	wget -y
+COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
