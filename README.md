@@ -52,7 +52,7 @@ This will produce a `ppa-private-key.asc` (private key) and a `KEY.gpg` (public 
 To compile a rust binary/library with x86_64-unknown-linux-musl target:
 
 ```yaml
-name: Static Musl Build
+name: PPA deployment
 
 on: [push]
 
@@ -64,7 +64,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       
-    - name: Build static
+    - name: Deploy to PPA
       uses:  apt-repository-action@master
       with:
         storage-container-url: https://storage.uk.cloud.ovh.net/v1/AUTH_12345/object-storage-1

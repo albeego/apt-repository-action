@@ -2,34 +2,35 @@
 set -e
 
 STORAGE_CONTAINER_URL=$1
-PRIVATE_KEY=$2
-PRIVATE_KEY_EMAIL=$3
-PASS_PHRASE=$4
-PUBLIC_KEY=$5
-PROJECT_ID=$6
-SWIFT_USERNAME=$7
-SWIFT_PASSWORD=$8
-REGION=$9
-CONTAINER_NAME=${10}
-LIST_FILE_NAME=${11}
+OPEN_STACK_AUTHORISATION_URL=$2
+OPEN_STACK_PROJECT_ID=$3
+SWIFT_CLIENT_USERNAME=$4
+SWIFT_CLIENT_PASSWORD=$5
+SWIFT_REGION_NAME=$6
+SWIFT_CONTAINER_NAME=$7
+PRIVATE_KEY=$8
+PRIVATE_KEY_EMAIL=$9
+PRIVATE_KEY_PASSPHRASE=${10}
+PUBLIC_KEY=${11}
+LIST_FILE_NAME=${12}
 
 download_files() {
-  swift --os-auth-url https://auth.cloud.ovh.net/v3 --auth-version 3 \
-    --os-project-id "$PROJECT_ID" \
-    --os-username "$SWIFT_USERNAME" \
-    --os-password "$SWIFT_PASSWORD" \
-    --os-region-name "$REGION" \
-    download "$CONTAINER_NAME" \
+  swift --os-auth-url "$OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
+    --os-project-id "$OPEN_STACK_PROJECT_ID" \
+    --os-username "$SWIFT_CLIENT_USERNAME" \
+    --os-password "$SWIFT_CLIENT_PASSWORD" \
+    --os-region-name "$SWIFT_REGION_NAME" \
+    download "$SWIFT_CONTAINER_NAME" \
     --prefix debian/pool/main/
 }
 
 upload() {
-  swift --os-auth-url https://auth.cloud.ovh.net/v3 --auth-version 3 \
-    --os-project-id "$PROJECT_ID" \
-    --os-username "$SWIFT_USERNAME" \
-    --os-password "$SWIFT_PASSWORD" \
-    --os-region-name "$REGION" \
-    upload "$CONTAINER_NAME" "$1"
+  swift --os-auth-url "$OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
+    --os-project-id "$OPEN_STACK_PROJECT_ID" \
+    --os-username "$SWIFT_CLIENT_USERNAME" \
+    --os-password "$SWIFT_CLIENT_PASSWORD" \
+    --os-region-name "$SWIFT_REGION_NAME" \
+    upload "$SWIFT_CONTAINER_NAME" "$1"
 }
 
 write_key_to_file() {
@@ -63,8 +64,8 @@ download_files
 mkdir cache
 apt-ftparchive generate apt-ftparchive.conf
 apt-ftparchive -c bionic.conf release debian/dists/bionic >>debian/dists/bionic/Release
-echo "$PASS_PHRASE" | gpg -u "${PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback -abs -o - debian/dists/bionic/Release >debian/dists/bionic/Release.gpg
-echo "$PASS_PHRASE" | gpg -u "${PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback --clearsign -o - debian/dists/bionic/Release >debian/dists/bionic/InRelease
+echo "$PRIVATE_KEY_PASSPHRASE" | gpg -u "${PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback -abs -o - debian/dists/bionic/Release >debian/dists/bionic/Release.gpg
+echo "$PRIVATE_KEY_PASSPHRASE" | gpg -u "${PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback --clearsign -o - debian/dists/bionic/Release >debian/dists/bionic/InRelease
 upload debian
 upload cache
 
