@@ -67,18 +67,18 @@ jobs:
     - name: Deploy to PPA
       uses:  albeego/apt-repository-action@master
       with:
-        storage-container-url: https://storage.uk.cloud.ovh.net/v1/AUTH_12345/object-storage-1
-        open-stack-authorisation-url: https://auth.cloud.ovh.net/v3
-        open-stack-project-id: 12345
-        swift-client-username: username
-        swift-client-password: ${{ secrets.SWIFT_PASSWORD }}
-        swift-region-name: UK
-        swift-container-name: object-storage-1
-        private-key: ${{ secrets.PPA_PRIVATE_KEY }}
-        private-key-email: info@me.com
-        private-key-passphrase: ${{ secrets.PPA_PRIVATE_KEY_PASSPHRASE }}
-        public-key: ${{ secrets.PPA_PUBLIC_KEY }}
-        list-file-name: my_respository.list
+        storage_container_url: https://storage.uk.cloud.ovh.net/v1/AUTH_12345/object-storage-1
+        open_stack_authorisation_url: https://auth.cloud.ovh.net/v3
+        open_stack_project_id: 12345
+        swift_client_username: username
+        swift_client_password: ${{ secrets.SWIFT_PASSWORD }}
+        swift_region_name: UK
+        swift_container_name: object-storage-1
+        private_key: ${{ secrets.PPA_PRIVATE_KEY }}
+        private_key_email: info@me.com
+        private_key_passphrase: ${{ secrets.PPA_PRIVATE_KEY_PASSPHRASE }}
+        public_key: ${{ secrets.PPA_PUBLIC_KEY }}
+        list_file_name: my_respository.list
 ```
 
 ## License

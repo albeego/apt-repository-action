@@ -2,40 +2,40 @@ name: "APT repository management action"
 description: "Maintain an APT repository by adding .deb files to an OpenStack compatible object storage instance"
 author: "Steven Leadbeater <info@ledsysconsultancy.com>"
 inputs:
-  storageContainerUrl:
+  storage_container_url:
     description: 'URL of OpenStack compatible Object Storage container'
     required: true
-  openStackAuthorisationUrl:
+  open_stack_authorisation_url:
     description: 'URL of OpenStack authorisation end point'
     required: true
-  openStackProjectId:
+  open_stack_project_id:
     description: 'OpenStack project ID with which the target Object Storage container is associated'
     required: true
-  swiftClientUsername:
+  swift_client_username:
     description: 'OpenStack / Swift client username for uploads'
     required: true
-  swiftClientPassword:
+  swift_client_password:
     description: 'OpenStack / Swift client password for uploads'
     required: true
-  swiftRegionName:
+  swift_region_name:
     description: 'OpenStack / Swift client region name for target Object Storage container'
     required: true
-  swiftContainerName:
+  swift_container_name:
     description: 'OpenStack / Swift client name for target Object Storage container'
     required: true
-  privateKey:
+  private_key:
     description: 'GPG Private key in ascii armor format for signing packages'
     required: true
-  privateKeyEmail:
+  private_key_email:
     description: 'GPG Private key email address'
     required: true
-  privateKeyPassphrase:
+  private_key_passphrase:
     description: 'GPG Private key passphrase'
     required: true
-  publicKey:
+  public_key:
     description: 'GPG Public key in ascii armor for verifying signing packages'
     required: true
-  listFileName:
+  list_file_name:
     description: 'Name of the .list file users will download and add to their local machines when consuming your PPA'
     required: true
 

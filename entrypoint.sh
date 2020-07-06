@@ -1,36 +1,23 @@
 #!/bin/bash
 set -e
 
-STORAGE_CONTAINER_URL=$1
-OPEN_STACK_AUTHORISATION_URL=$2
-OPEN_STACK_PROJECT_ID=$3
-SWIFT_CLIENT_USERNAME=$4
-SWIFT_CLIENT_PASSWORD=$5
-SWIFT_REGION_NAME=$6
-SWIFT_CONTAINER_NAME=$7
-PRIVATE_KEY=$8
-PRIVATE_KEY_EMAIL=$9
-PRIVATE_KEY_PASSPHRASE=${10}
-PUBLIC_KEY=${11}
-LIST_FILE_NAME=${12}
-
 download_files() {
-  swift --os-auth-url "$OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
-    --os-project-id "$OPEN_STACK_PROJECT_ID" \
-    --os-username "$SWIFT_CLIENT_USERNAME" \
-    --os-password "$SWIFT_CLIENT_PASSWORD" \
-    --os-region-name "$SWIFT_REGION_NAME" \
-    download "$SWIFT_CONTAINER_NAME" \
+  swift --os-auth-url "$INPUT_OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
+    --os-project-id "$INPUT_OPEN_STACK_PROJECT_ID" \
+    --os-username "$INPUT_SWIFT_CLIENT_USERNAME" \
+    --os-password "$INPUT_SWIFT_CLIENT_PASSWORD" \
+    --os-region-name "$INPUT_SWIFT_REGION_NAME" \
+    download "$INPUT_SWIFT_CONTAINER_NAME" \
     --prefix debian/pool/main/
 }
 
 upload() {
-  swift --os-auth-url "$OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
-    --os-project-id "$OPEN_STACK_PROJECT_ID" \
-    --os-username "$SWIFT_CLIENT_USERNAME" \
-    --os-password "$SWIFT_CLIENT_PASSWORD" \
-    --os-region-name "$SWIFT_REGION_NAME" \
-    upload "$SWIFT_CONTAINER_NAME" "$1"
+  swift --os-auth-url "$INPUT_OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
+    --os-project-id "$INPUT_OPEN_STACK_PROJECT_ID" \
+    --os-username "$INPUT_SWIFT_CLIENT_USERNAME" \
+    --os-password "$INPUT_SWIFT_CLIENT_PASSWORD" \
+    --os-region-name "$INPUT_SWIFT_REGION_NAME" \
+    upload "$INPUT_SWIFT_CONTAINER_NAME" "$1"
 }
 
 write_key_to_file() {
@@ -44,14 +31,14 @@ write_key_to_file() {
 }
 
 write_private_key_to_file() {
-  write_key_to_file "PRIVATE" private.key "$PRIVATE_KEY"
+  write_key_to_file "PRIVATE" private.key "$INPUT_PRIVATE_KEY"
 }
 
 write_public_key_to_file() {
-  write_key_to_file "PUBLIC" KEY.gpg "$PUBLIC_KEY"
+  write_key_to_file "PUBLIC" KEY.gpg "$INPUT_PUBLIC_KEY"
 }
 
-rm "$LIST_FILE_NAME" || true
+rm "$INPUT_LIST_FILE_NAME" || true
 
 sh -c "echo $*"
 
@@ -67,15 +54,15 @@ download_files
 mkdir cache
 apt-ftparchive generate apt-ftparchive.conf
 apt-ftparchive -c bionic.conf release debian/dists/bionic >>debian/dists/bionic/Release
-echo "$PRIVATE_KEY_PASSPHRASE" | gpg -u "${PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback -abs -o - debian/dists/bionic/Release >debian/dists/bionic/Release.gpg
-echo "$PRIVATE_KEY_PASSPHRASE" | gpg -u "${PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback --clearsign -o - debian/dists/bionic/Release >debian/dists/bionic/InRelease
+echo "$INPUT_PRIVATE_KEY_PASSPHRASE" | gpg -u "${INPUT_PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback -abs -o - debian/dists/bionic/Release >debian/dists/bionic/Release.gpg
+echo "$INPUT_PRIVATE_KEY_PASSPHRASE" | gpg -u "${INPUT_PRIVATE_KEY_EMAIL}" --batch --quiet --yes --passphrase-fd 0 --pinentry-mode loopback --clearsign -o - debian/dists/bionic/Release >debian/dists/bionic/InRelease
 upload debian
 upload cache
 
-wget "$STORAGE_CONTAINER_URL"/"$LIST_FILE_NAME" || echo "deb $STORAGE_CONTAINER_URL bionic main" >"$LIST_FILE_NAME"
-upload "$LIST_FILE_NAME"
+wget "$INPUT_STORAGE_CONTAINER_URL"/"$INPUT_LIST_FILE_NAME" || echo "deb $INPUT_STORAGE_CONTAINER_URL bionic main" >"$INPUT_LIST_FILE_NAME"
+upload "$INPUT_LIST_FILE_NAME"
 
-wget "$STORAGE_CONTAINER_URL"/KEY.gpg || write_public_key_to_file
+wget "$INPUT_STORAGE_CONTAINER_URL"/KEY.gpg || write_public_key_to_file
 upload KEY.gpg
 
 rm KEY.gpg
