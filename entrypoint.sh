@@ -40,10 +40,7 @@ write_public_key_to_file() {
 
 rm "$INPUT_LIST_FILE_NAME" || true
 
-sh -c "echo $*"
-
 write_private_key_to_file
-cat private.key
 gpg --import private.key
 rm private.key
 
