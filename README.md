@@ -51,7 +51,47 @@ This will produce a `ppa-private-key.asc` (private key) and a `KEY.gpg` (public 
 
 ## Usage
 
-To compile a rust binary/library with x86_64-unknown-linux-musl target:
+To deploy a .deb file to your PPA, you will need some configuration files and the public key in the execution directory:
+
+### apt-ftparchive.conf
+
+This configuration file is used to specify the structure of your PPA, where are things stored, what compressions to use, supported version and what architectures are available.
+
+```shell script
+Dir {
+    ArchiveDir "./debian";
+    CacheDir "./cache";
+};
+Default {
+    Packages::Compress ". gzip bzip2";
+    Sources::Compress ". gzip";
+    Contents::Compress ". gzip";
+};
+TreeDefault {
+    BinCacheDB "packages-$(SECTION)-$(ARCH).db";
+    Directory "pool/$(SECTION)";
+    Packages "$(DIST)/$(SECTION)/binary-$(ARCH)/Packages";
+    SrcDirectory "pool/$(SECTION)";
+    Contents "$(DIST)/Contents-$(ARCH)";
+};
+Tree "dists/bionic" {
+    Sections "main";
+    Architectures "amd64";
+};
+```
+This configuration will support ubuntu 18.04 and 20.04 for 64 bit x86 systems only
+
+### bionic.conf
+
+```shell script
+APT::FTPArchive::Release::Codename "bionic";
+APT::FTPArchive::Release::Origin "My repository";
+APT::FTPArchive::Release::Components "main";
+APT::FTPArchive::Release::Label "Packages hosted by me!!!";
+APT::FTPArchive::Release::Architectures "amd64";
+APT::FTPArchive::Release::Suite "bionic";
+```
+ Currently there is only support for bionic, there will be more support added soon
 
 ```yaml
 name: PPA deployment
@@ -65,7 +105,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      
+    - name: Copy PPA files to working directory
+      run: |
+        cd sumbodule
+        cp KEY.gpg build-directory/
+        cp apt-ftparchive.conf build-directory/
+        cp bionic.conf build-directory/
     - name: Deploy to PPA
       uses:  albeego/apt-repository-action@master
       with:
