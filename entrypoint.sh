@@ -61,8 +61,7 @@ upload cache
 wget "$INPUT_STORAGE_CONTAINER_URL"/"$INPUT_LIST_FILE_NAME" || echo "deb $INPUT_STORAGE_CONTAINER_URL bionic main" >"$INPUT_LIST_FILE_NAME"
 upload "$INPUT_LIST_FILE_NAME"
 
-wget "$INPUT_STORAGE_CONTAINER_URL"/KEY.gpg || write_public_key_to_file
-upload KEY.gpg
+wget "$INPUT_STORAGE_CONTAINER_URL"/"$INPUT_PUBLIC_KEY" || upload "$INPUT_PUBLIC_KEY"
 
 rm KEY.gpg
 rm debian -rf

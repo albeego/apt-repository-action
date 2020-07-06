@@ -27,7 +27,7 @@ It is not recommended to check .deb files in to source control, however precedin
 ### `private_key_passphrase`
 **Required** GPG Private key passphrase
 ### `public_key`
-**Required** GPG Public key in ascii armor for verifying signing packages
+**Required** GPG Public key file name, stored in ascii armor for verifying signing packages - This may well exceed the size limit for secrets!!!
 ### `list_file_name`
 **Required** Name of the .list file users will download and add to their local machines when consuming your PPA
 ### `execution_path`:
@@ -79,7 +79,7 @@ jobs:
         private_key: ${{ secrets.PPA_PRIVATE_KEY }}
         private_key_email: info@me.com
         private_key_passphrase: ${{ secrets.PPA_PRIVATE_KEY_PASSPHRASE }}
-        public_key: ${{ secrets.PPA_PUBLIC_KEY }}
+        public_key: KEY.gpg
         list_file_name: my_respository.list
         execution_path: sumbodule/build-directory
 ```
