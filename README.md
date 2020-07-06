@@ -65,7 +65,7 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Deploy to PPA
-      uses:  apt-repository-action@master
+      uses:  albeego/apt-repository-action@master
       with:
         storage-container-url: https://storage.uk.cloud.ovh.net/v1/AUTH_12345/object-storage-1
         open-stack-authorisation-url: https://auth.cloud.ovh.net/v3
