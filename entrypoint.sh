@@ -43,7 +43,7 @@ cd "$INPUT_EXECUTION_PATH"
 rm "$INPUT_LIST_FILE_NAME" || true
 
 write_private_key_to_file
-gpg --import private.key
+gpg --import -no-tty --batch --yes private.key
 rm private.key
 
 mkdir -p debian/dists/bionic/main/binary-amd64
