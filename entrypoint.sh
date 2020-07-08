@@ -47,6 +47,7 @@ gpg --import private.key
 rm private.key
 
 mkdir -p debian/dists/bionic/main/binary-amd64
+mkdir -p debian/dists/bionic/main/binary-arm64
 mkdir -p debian/pool/main
 cp -r *.deb debian/pool/main
 download_files
