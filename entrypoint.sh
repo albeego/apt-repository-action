@@ -49,8 +49,8 @@ rm private.key
 mkdir -p debian/dists/bionic/main/binary-amd64
 mkdir -p debian/dists/bionic/main/binary-arm64
 mkdir -p debian/pool/main
-cp -r *.deb debian/pool/main
 download_files
+cp -r *.deb debian/pool/main
 mkdir cache || true
 apt-ftparchive generate apt-ftparchive.conf
 apt-ftparchive -c bionic.conf release debian/dists/bionic >>debian/dists/bionic/Release
