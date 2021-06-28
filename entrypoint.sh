@@ -8,13 +8,12 @@ download_files() {
     --os-password "$INPUT_SWIFT_CLIENT_PASSWORD" \
     --os-region-name "$INPUT_SWIFT_REGION_NAME" \
     download "$INPUT_SWIFT_CONTAINER_NAME" \
-    --prefix debian/pool/main/ \
-    --output-dir debian/pool/main/
+    --prefix debian/pool/main/
 }
 
 upload() {
   swift --os-auth-url "$INPUT_OPEN_STACK_AUTHORISATION_URL" --auth-version 3 \
-    --os-project-id "$INPUT_OPEN_STACK_PROJECT_ID" \ 
+    --os-project-id "$INPUT_OPEN_STACK_PROJECT_ID" \
     --os-username "$INPUT_SWIFT_CLIENT_USERNAME" \
     --os-password "$INPUT_SWIFT_CLIENT_PASSWORD" \
     --os-region-name "$INPUT_SWIFT_REGION_NAME" \
@@ -51,6 +50,7 @@ mkdir -p debian/dists/bionic/main/binary-amd64
 mkdir -p debian/dists/bionic/main/binary-arm64
 mkdir -p debian/pool/main
 download_files
+cp -r *.deb debian/pool/main || true
 mkdir cache || true
 apt-ftparchive generate apt-ftparchive.conf
 apt-ftparchive -c bionic.conf release debian/dists/bionic >>debian/dists/bionic/Release
